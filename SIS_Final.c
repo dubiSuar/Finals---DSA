@@ -17,7 +17,7 @@ struct Student {
     struct Student* next;
 };
 
-// Function prototypes
+// Functions for program - add,remove, search, etc;
 void addStudent(struct Student** head, int studentNumber);
 void displayStudents(struct Student* head);
 int authenticateAdmin(char* adminName, char* adminPass);
@@ -27,14 +27,24 @@ void searchStudent(struct Student* head, int studentNumber);
 void deleteStudent(struct Student** head, int studentNumber); // New function prototype
 void userLogin(struct Student* head);
 void enrollCourse(struct Student* head, int studentNumber);
-// Other function prototypes
+
+//File handling Functionsd
+void saveStudentsToFile(struct Student* head);
+struct Student* loadStudentsFromFile();
+
+
+// Function menus here.
 int displayMenu();
 void titleInfo();
 void adminLogin();
 
-int main() {
+int main() 
+{
     int choice;
     struct Student* studentList = NULL;
+
+    //file handling, loading saved data; to check baka hindi ulit gumagana
+     studentList = loadStudentsFromFile();
 
     do {
         choice = displayMenu();
@@ -51,6 +61,8 @@ int main() {
             break;
         }
     } while (choice != 0);
+
+    saveStudentsToFile(studentList);
 
     printf("Program has Terminated Successfully!\n");
 
@@ -285,6 +297,7 @@ void enterStudentDetails(struct Student* student) {
 
     fflush(stdin);
 
+    printf("Year Level:");
     scanf(" %s", &student->year); 
 
     fflush(stdin);
@@ -413,6 +426,82 @@ void enrollCourse(struct Student* head, int studentNumber) {
 
     // If the student was not found
     printf("\nStudent with ID %d not found.\n", studentNumber);
+}
+
+
+/*
+FOR FILE HADNLING
+TO DO:
+    - DOUBLE CHECK IF GUMAGANA
+    - PRINTTING PROBLEM: PRINTING EXCESS CHARACTERS
+*/
+
+//saving student data - to check
+void saveStudentsToFile(struct Student* head) 
+{
+    FILE* file = fopen("student_data.txt", "w");
+    if (file == NULL) {
+        printf("Error opening file for writing: student_data.txt\n");
+        return;
+    }
+
+    while (head != NULL) {
+        fprintf(file, "%d %s %s %s %d %s %s %s %s\n",
+                head->StudentNumber,
+                head->firstName,
+                head->middleName,
+                head->lastName,
+                head->age,
+                head->year,
+                head->email,
+                head->sex,
+                head->course);
+
+        head = head->next;
+    }
+
+    fclose(file);
+}
+
+
+//loading students from file rito
+struct Student* loadStudentsFromFile() 
+{
+    struct Student* head = NULL;
+    FILE* file = fopen("student_data.txt", "r");
+    if (file == NULL) {
+        printf("No existing data found. Starting with an empty student list.\n");
+        return head;
+    }
+
+    while (1) {
+        struct Student* newStudent = (struct Student*)malloc(sizeof(struct Student));
+        if (!newStudent) {
+            printf("\n Memory allocation failed for adding student.");
+            fclose(file);
+            return head;
+        }
+
+        if (fscanf(file, "%d %s %s %s %d %s %s %s %s",
+                   &newStudent->StudentNumber,
+                   newStudent->firstName,
+                   newStudent->middleName,
+                   newStudent->lastName,
+                   &newStudent->age,
+                   newStudent->year,
+                   newStudent->email,
+                   newStudent->sex,
+                   newStudent->course) == EOF) {
+            free(newStudent);
+            break;  // End of file reached
+        }
+
+        newStudent->next = head;
+        head = newStudent;
+    }
+
+    fclose(file);
+    return head;
 }
 
 
