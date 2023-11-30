@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -38,7 +37,7 @@ int displayMenu();
 void titleInfo();
 void adminLogin();
 
-int main() 
+int main()
 {
     int choice;
     struct Student* studentList = NULL;
@@ -56,8 +55,10 @@ int main()
         case 2:
             adminLogin(&studentList);
             break;
+        case 0:
+            printf("\n Logging Out.....");
         default:
-            printf("Invalid Input! Select [1] or [2]\n");
+            printf("Logged Out Successfully!");
             break;
         }
     } while (choice != 0);
@@ -77,6 +78,7 @@ int displayMenu() {
     printf("\n\t| Select Login :       |");
     printf("\n\t| [1] USER             |");
     printf("\n\t| [2] ADMINISTRATOR    |");
+    printf("\n\t| [0] LOGOUT           |");
     printf("\n\t|----------------------|");
     printf("\n SELECT: ");
     scanf("%d", &choice);
@@ -276,7 +278,7 @@ void addStudent(struct Student** head, int studentNumber) {
 void enterStudentDetails(struct Student* student) {
 
     char course[30];
-    
+
     printf("First Name: ");
     scanf("%s", student->firstName);
 
@@ -298,7 +300,7 @@ void enterStudentDetails(struct Student* student) {
     fflush(stdin);
 
     printf("Year Level:");
-    scanf(" %s", &student->year); 
+    scanf(" %s", &student->year);
 
     fflush(stdin);
 
@@ -314,7 +316,7 @@ void enterStudentDetails(struct Student* student) {
 
     printf("Course: ");
     scanf(" %[^\n]", student->course);
-  
+
 }
 
 void searchStudent(struct Student* head, int studentNumber) {
@@ -336,7 +338,7 @@ void searchStudent(struct Student* head, int studentNumber) {
             char emailBuffer[50];  // Buffer for email
             strcpy(emailBuffer, head->email);
 
-            printf("| %-15d | %-30s | %-5d | %-5d | %-10s | %-30s | %-30s |\n",
+            printf("| %-15d | %-30s | %-5d | %-5s | %-10s | %-30s | %-30s |\n",
                    head->StudentNumber,
                    nameBuffer,
                    head->age,
@@ -371,7 +373,7 @@ void displayStudentsInTable(struct Student* head) {
         char emailBuffer[50];  // Buffer for email
         strcpy(emailBuffer, head->email);
 
-        printf("| %-15d | %-30s | %-5d | %-5d | %-10s | %-30s | %-30s |\n",
+        printf("| %-15d | %-30s | %-5d | %-5s | %-10s | %-30s | %-30s |\n",
                head->StudentNumber,
                nameBuffer,
                head->age,
@@ -437,7 +439,7 @@ TO DO:
 */
 
 //saving student data - to check
-void saveStudentsToFile(struct Student* head) 
+void saveStudentsToFile(struct Student* head)
 {
     FILE* file = fopen("student_data.txt", "w");
     if (file == NULL) {
@@ -465,7 +467,7 @@ void saveStudentsToFile(struct Student* head)
 
 
 //loading students from file rito
-struct Student* loadStudentsFromFile() 
+struct Student* loadStudentsFromFile()
 {
     struct Student* head = NULL;
     FILE* file = fopen("student_data.txt", "r");
@@ -474,7 +476,9 @@ struct Student* loadStudentsFromFile()
         return head;
     }
 
-    while (1) {
+    char lineBuffer[150];   // Buffer for reading a line from the file
+                            // TO STUDY TO ^^^
+    while (fgets(lineBuffer, sizeof(lineBuffer), file) != NULL) {
         struct Student* newStudent = (struct Student*)malloc(sizeof(struct Student));
         if (!newStudent) {
             printf("\n Memory allocation failed for adding student.");
@@ -482,7 +486,7 @@ struct Student* loadStudentsFromFile()
             return head;
         }
 
-        if (fscanf(file, "%d %s %s %s %d %s %s %s %s",
+        if (sscanf(lineBuffer, "%d %s %s %s %d %s %s %s %s",
                    &newStudent->StudentNumber,
                    newStudent->firstName,
                    newStudent->middleName,
@@ -491,9 +495,9 @@ struct Student* loadStudentsFromFile()
                    newStudent->year,
                    newStudent->email,
                    newStudent->sex,
-                   newStudent->course) == EOF) {
+                   newStudent->course) != 9) {
             free(newStudent);
-            break;  // End of file reached
+            continue;
         }
 
         newStudent->next = head;
@@ -503,5 +507,6 @@ struct Student* loadStudentsFromFile()
     fclose(file);
     return head;
 }
+
 
 
