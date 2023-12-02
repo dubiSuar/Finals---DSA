@@ -426,8 +426,22 @@ void enrollCourse(struct Student* head, int studentNumber) {
     while (current != NULL) {
         if (current->StudentNumber == studentNumber) {
             printf("\nEnter Course to Enroll for Student %d: ", studentNumber);
-            scanf(" %[^\n]", current->course); // Enroll the student in a course
-            printf("\nStudent No. %d has been enrolled in the course: %s\n", studentNumber, current->course);
+
+            // Read the new course input
+            char newCourse[50];
+            scanf(" %[^\n]", newCourse);
+
+            // Check if the student already has courses
+            if (strlen(current->course) > 0) {
+                // Append the new course to the existing courses
+                strcat(current->course, ", ");
+                strcat(current->course, newCourse);
+            } else {
+                // If the student has no existing courses, set the new course directly
+                strcpy(current->course, newCourse);
+            }
+
+            printf("\nStudent No. %d has been enrolled in the courses: %s\n", studentNumber, current->course);
             return;
         }
         current = current->next;
