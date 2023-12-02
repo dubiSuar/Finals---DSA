@@ -95,71 +95,78 @@ void titleInfo() {
 void userLogin(struct Student* head) {
     char userName[20];
     char userPass[20];
+    int authenticationFailed = 0;
 
-    printf("\n\t|----------------------|");
-    printf("\n\t|---- USER LOGIN ------|");
-    printf("\n\t| ENTER USER NAME      |");
-    printf("\n\t|----------------------|");
-    printf("\n USER NAME: ");
-    scanf("%s", userName);
+    do {
+        printf("\n\t|----------------------|");
+        printf("\n\t|---- USER LOGIN ------|");
+        printf("\n\t| ENTER USER NAME      |");
+        printf("\n\t|----------------------|");
+        printf("\n USER NAME: ");
+        scanf("%s", userName);
 
-    printf("\n\t|----------------------|");
-    printf("\n\t| ENTER PASSWORD       |");
-    printf("\n\t|----------------------|");
-    printf("\n PASSWORD : ");
-    scanf("%s", userPass);
+        printf("\n\t|----------------------|");
+        printf("\n\t| ENTER PASSWORD       |");
+        printf("\n\t|----------------------|");
+        printf("\n PASSWORD : ");
+        scanf("%s", userPass);
 
-    if (strcmp(userName, "user") == 0 && strcmp(userPass, "user123") == 0) {
-        printf("\nAuthentication Successful! Welcome, %s!\n", userName);
+        if (strcmp(userName, "user") == 0 && strcmp(userPass, "user123") == 0) {
+            printf("\nAuthentication Successful! Welcome, %s!\n", userName);
 
-        int userChoice;
+            int userChoice;
 
-        do {
-            printf("\n\t|--------------------------|");
-            printf("\n\t|       USER MENU          |");
-            printf("\n\t| [1] Search Student      |");
-            printf("\n\t| [2] Enroll Course       |");
-            printf("\n\t| [0] Logout              |");
-            printf("\n\t|--------------------------|");
-            printf("\n SELECT: ");
-            scanf("%d", &userChoice);
+            do {
+                printf("\n\t|--------------------------|");
+                printf("\n\t|       USER MENU          |");
+                printf("\n\t| [1] Search Student      |");
+                printf("\n\t| [2] Enroll Course       |");
+                printf("\n\t| [0] Logout              |");
+                printf("\n\t|--------------------------|");
+                printf("\n SELECT: ");
+                scanf("%d", &userChoice);
 
-            switch (userChoice) {
-                case 1: {
-                    int studentNumber;
-                    printf("\n\t|-------------------------|");
-                    printf("\n\t|   SEARCH STUDENT        |");
-                    printf("\n\t| Enter Student Number    |");
-                    printf("\n\t|-------------------------|");
-                    printf("\n STUDENT TO BE SEARCHED : ");
-                    scanf("%d", &studentNumber);
-                    searchStudent(head, studentNumber);
-                    break;
+                switch (userChoice) {
+                    case 1: {
+                        int studentNumber;
+                        printf("\n\t|-------------------------|");
+                        printf("\n\t|   SEARCH STUDENT        |");
+                        printf("\n\t| Enter Student Number    |");
+                        printf("\n\t|-------------------------|");
+                        printf("\n STUDENT TO BE SEARCHED : ");
+                        scanf("%d", &studentNumber);
+                        searchStudent(head, studentNumber);
+                        break;
+                    }
+                    case 2: {
+                        int studentNumber;
+                        printf("\n\t|------------------------|");
+                        printf("\n\t|    ENROLL COURSE        |");
+                        printf("\n\t| Enter Student Number   |");
+                        printf("\n\t|------------------------|");
+                        printf("\n STUDENT TO ENROLL : ");
+                        scanf("%d", &studentNumber);
+                        enrollCourse(head, studentNumber);
+                        break;
+                    }
+                    case 0:
+                        printf("\nLogging out...\n");
+                        break;
+                    default:
+                        printf("Invalid choice! Please select again.\n");
+                        break;
                 }
-                case 2: {
-                    int studentNumber;
-                    printf("\n\t|------------------------|");
-                    printf("\n\t|    ENROLL COURSE        |");
-                    printf("\n\t| Enter Student Number   |");
-                    printf("\n\t|------------------------|");
-                    printf("\n STUDENT TO ENROLL : ");
-                    scanf("%d", &studentNumber);
-                    enrollCourse(head, studentNumber);
-                    break;
-                }
-                case 0:
-                    printf("\nLogging out...\n");
-                    break;
-                default:
-                    printf("Invalid choice! Please select again.\n");
-                    break;
-            }
 
-        } while (userChoice != 0);
-    } else {
-        printf("\nAuthentication Failed! Invalid username or password.\n");
-    }
+            } while (userChoice != 0);
+
+            authenticationFailed = 0; // Reset authentication failure flag
+        } else {
+            printf("\nAuthentication Failed! Invalid username or password.\n");
+            authenticationFailed = 1; // Set authentication failure flag
+        }
+    } while (authenticationFailed);
 }
+
 
 int authenticateAdmin(char* adminName, char* adminPass) {
     const char* correctAdminName = "admin";
@@ -199,7 +206,7 @@ void adminLogin(struct Student** studentList) {
             printf("\n\t| [1] Add Student        |");
             printf("\n\t| [2] Display Students   |");
             printf("\n\t| [3] Search Student     |");
-            printf("\n\t| [4] Delete Student     |"); // Added option for deleting a student
+            printf("\n\t| [4] Delete Student     |"); 
             printf("\n\t| [0] Logout             |");
             printf("\n\t|-------------------------|");
             printf("\n SELECT: ");
@@ -430,6 +437,24 @@ void enrollCourse(struct Student* head, int studentNumber) {
     printf("\nStudent with ID %d not found.\n", studentNumber);
 }
 
+void displayCourseTable() 
+{
+    printf("|-------------------------------------------------------------------------|\n");
+    printf("| Course ID |       Course Name                     |\n");
+    printf("|-------------------------------------------------------------------------|\n");
+    printf("|   IIT406  | Computer Programming 3                                      |\n");
+    printf("|   IIT404  | Data Structures and Algorithms                              |\n");
+    printf("|   ITS404  | Computer Architecture, Organization and Logic Design        |\n");
+    printf("|   IIT408  | Operating System                                            |\n");
+    printf("|   ITS401  | Networking 1                                                |\n");
+    printf("|   GE11    | Readings in Philippine History                              |\n");
+    printf("|   GE4     | Life and Works of Rizal                                     |\n");
+    printf("|   PE3     | Physical Education 3                                        |\n");
+    printf("|   RE3     | Religious Education 3                                       |\n");
+    printf("|-------------------------------------------------------------------------|\n");
+}
+
+
 
 /*
 FOR FILE HADNLING
@@ -507,6 +532,5 @@ struct Student* loadStudentsFromFile()
     fclose(file);
     return head;
 }
-
 
 
