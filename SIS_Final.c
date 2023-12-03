@@ -18,12 +18,6 @@ struct Student
     struct Student *next;
 };
 
-// COURSES FUNCTION - modifying the courses through admin function here
-void displayCoursesForStudent(struct Student *head, int studentNumber);
-void addCourse(struct Student *current);
-void removeCourse(struct Student *current);
-void modifyCourse(struct Student *current);
-
 // Functions for program - add,remove, search, etc;
 void addStudent(struct Student **head, int studentNumber);
 void displayStudents(struct Student *head);
@@ -289,7 +283,7 @@ void adminLogin(struct Student **studentList)
             }
             case 5:
             {
-                printf("Enter Student Number to Modify: "); 
+                printf("Enter Student Number to Modify: ");
                 scanf("%d", &modifyStudentNumber);
                 modifyStudent(*studentList, modifyStudentNumber);
                 break;
