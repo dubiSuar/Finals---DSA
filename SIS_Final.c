@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,11 +22,11 @@ struct Student
 };
 
 //COURSES FUNCTION
-void manageStudentCourses(struct Student *head, int studentNumber);
+void manageStudentCourses(struct Student *head, int studentNumber); 
 void displayCoursesForStudent(struct Student *head, int studentNumber);
-void addCourse(struct Student *current);
-void removeCourse(struct Student *current);
-void modifyCourse(struct Student *current);
+void addCourse(struct Student *current);                         
+void removeCourse(struct Student *current); 
+void modifyCourse(struct Student *current); 
 void manageStudentCourses(struct Student *head, int studentNumber);
 
 // Functions for program - add,remove, search, etc;
@@ -142,9 +143,9 @@ void userLogin(struct Student *head)
             {
                 printf("\n\t|--------------------------|");
                 printf("\n\t|       USER MENU          |");
-                printf("\n\t| [1] Search Student      |");
-                printf("\n\t| [2] Enroll Course       |");
-                printf("\n\t| [0] Logout              |");
+                printf("\n\t| [1] Search Student       |");
+                printf("\n\t| [2] Enroll Course        |");
+                printf("\n\t| [0] Logout               |");
                 printf("\n\t|--------------------------|");
                 printf("\n SELECT: ");
                 scanf("%d", &userChoice);
@@ -167,7 +168,7 @@ void userLogin(struct Student *head)
                 {
                     int studentNumber;
                     printf("\n\t|------------------------|");
-                    printf("\n\t|    ENROLL COURSE        |");
+                    printf("\n\t|    ENROLL COURSE       |");
                     printf("\n\t| Enter Student Number   |");
                     printf("\n\t|------------------------|");
                     displayCourseTable();
@@ -434,9 +435,9 @@ void modifyStudent(struct Student *head, int studentNumber)
             fgets(current->sex, sizeof(current->sex), stdin);
             current->sex[strcspn(current->sex, "\n")] = '\0';
 
-            printf("Enter New Course: ");
-            fgets(current->course, sizeof(current->course), stdin);
-            current->course[strcspn(current->course, "\n")] = '\0';
+          printf("Enter New Course(s) (comma-separated): ");
+          fgets(current->course, sizeof(current->course), stdin);
+          current->course[strcspn(current->course, "\n")] = '\0';
 
             printf("\nStudent information updated successfully!\n");
             return;
@@ -590,7 +591,7 @@ void displayCourseTable()
 {
     printf("|-------------------------------------------------------------------------|\n");
     printf("|-------------------------------------------------------------------------|\n");
-    printf("| Course ID |       Course Name                     |\n");
+    printf("| Course ID |       Course Name                                           |\n");
     printf("|-------------------------------------------------------------------------|\n");
     printf("|   IIT406  | Computer Programming 3                                      |\n");
     printf("|   IIT404  | Data Structures and Algorithms                              |\n");
@@ -697,6 +698,8 @@ struct Student *loadStudentsFromFile()
 
     return head;
 }
+
+
 
 
 
