@@ -3,10 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-//#define FILE *file = fopen("student_data.txt", "w");
-
-// Struct for Student
+// Student Structure
 struct Student
 {
     int StudentNumber;
@@ -21,13 +18,11 @@ struct Student
     struct Student *next;
 };
 
-//COURSES FUNCTION
-void manageStudentCourses(struct Student *head, int studentNumber); 
+// COURSES FUNCTION - modifying the courses through admin function here
 void displayCoursesForStudent(struct Student *head, int studentNumber);
-void addCourse(struct Student *current);                         
-void removeCourse(struct Student *current); 
-void modifyCourse(struct Student *current); 
-void manageStudentCourses(struct Student *head, int studentNumber);
+void addCourse(struct Student *current);
+void removeCourse(struct Student *current);
+void modifyCourse(struct Student *current);
 
 // Functions for program - add,remove, search, etc;
 void addStudent(struct Student **head, int studentNumber);
@@ -38,16 +33,17 @@ void displayStudentsInTable(struct Student *head);
 void searchStudent(struct Student *head, int studentNumber);
 void modifyStudent(struct Student *head, int studentNumber);
 void deleteStudent(struct Student **head, int studentNumber);
-void userLogin(struct Student *head);
+void userLogin(struct Student **head);
 void enrollCourse(struct Student *head, int studentNumber);
 
+// Fixed table to display courses for the student
 void displayCourseTable();
 
-// File handling Functionsd
+// File Handling Functions
 void saveStudentsToFile(struct Student *head);
 struct Student *loadStudentsFromFile();
 
-// Function menus here.
+// Function menus
 int displayMenu();
 void titleInfo();
 void adminLogin();
@@ -57,7 +53,7 @@ int main()
     int choice;
     struct Student *studentList = NULL;
 
-    // file handling, loading saved data; to check baka hindi ulit gumagana
+    // Load saved student file - attach "student_data.txt" file always
     studentList = loadStudentsFromFile();
 
     do
@@ -74,7 +70,7 @@ int main()
             break;
         case 0:
             printf("\n Logging Out.....");
-            //FILE SAVING HERE
+            // FILE SAVING HERE
             saveStudentsToFile(studentList);
             break;
         default:
@@ -112,7 +108,7 @@ void titleInfo()
     printf("\n========================================");
 }
 
-void userLogin(struct Student *head)
+void userLogin(struct Student **head)
 {
     char userName[20];
     char userPass[20];
@@ -143,8 +139,8 @@ void userLogin(struct Student *head)
             {
                 printf("\n\t|--------------------------|");
                 printf("\n\t|       USER MENU          |");
-                printf("\n\t| [1] Search Student       |");
-                printf("\n\t| [2] Enroll Course        |");
+                printf("\n\t| [1] Display Information  |");
+                printf("\n\t| [2] Enroll Course/s      |");
                 printf("\n\t| [0] Logout               |");
                 printf("\n\t|--------------------------|");
                 printf("\n SELECT: ");
@@ -156,10 +152,10 @@ void userLogin(struct Student *head)
                 {
                     int studentNumber;
                     printf("\n\t|-------------------------|");
-                    printf("\n\t|   SEARCH STUDENT        |");
+                    printf("\n\t|   Display Information   |");
                     printf("\n\t| Enter Student Number    |");
                     printf("\n\t|-------------------------|");
-                    printf("\n STUDENT TO BE SEARCHED : ");
+                    printf("\n ID to be displayed : ");
                     scanf("%d", &studentNumber);
                     searchStudent(head, studentNumber);
                     break;
@@ -178,6 +174,7 @@ void userLogin(struct Student *head)
                     break;
                 }
                 case 0:
+                    saveStudentsToFile(*head);
                     printf("\nLogging out...\n");
                     break;
                 default:
@@ -187,18 +184,19 @@ void userLogin(struct Student *head)
 
             } while (userChoice != 0);
 
-            authenticationFailed = 0; // Reset authentication failure flag
+            authenticationFailed = 0;
         }
         else
         {
             printf("\nAuthentication Failed! Invalid username or password.\n");
-            authenticationFailed = 1; // Set authentication failure flag
+            authenticationFailed = 1;
         }
     } while (authenticationFailed);
 }
 
 int authenticateAdmin(char *adminName, char *adminPass)
 {
+    // default credentials
     const char *correctAdminName = "admin";
     const char *correctAdminPass = "admin123";
 
@@ -291,15 +289,17 @@ void adminLogin(struct Student **studentList)
             }
             case 5:
             {
-                printf("Enter Student Number to Modify: ");
+                printf("Enter Student Number to Modify: "); 
                 scanf("%d", &modifyStudentNumber);
                 modifyStudent(*studentList, modifyStudentNumber);
                 break;
             }
 
             case 0:
+                saveStudentsToFile(*studentList);
                 printf("\nLogging out...\n");
                 break;
+
             default:
                 printf("Invalid choice! Please select again.\n");
                 break;
@@ -337,8 +337,6 @@ void addStudent(struct Student **head, int studentNumber)
 void enterStudentDetails(struct Student *student)
 {
 
-    //char course[30];
-
     printf("First Name: ");
     scanf("%s", student->firstName);
 
@@ -374,9 +372,7 @@ void enterStudentDetails(struct Student *student)
 
     fflush(stdin);
 
-    printf("Course Manager");
-
-    //scanf(" %[^\n]", student->course);
+    printf("Courses Shall be Enrolled by the Student");
 }
 
 void modifyStudent(struct Student *head, int studentNumber)
@@ -403,12 +399,13 @@ void modifyStudent(struct Student *head, int studentNumber)
 
             // Clearing input buffers
             int c;
-            while ((c = getchar()) != '\n' && c != EOF);
+            while ((c = getchar()) != '\n' && c != EOF)
+                ;
 
             // Get new values
             printf("Enter New First Name: ");
             fgets(current->firstName, sizeof(current->firstName), stdin);
-            current->firstName[strcspn(current->firstName, "\n")] = '\0';  // Remove trailing newline
+            current->firstName[strcspn(current->firstName, "\n")] = '\0'; // Remove trailing newline
 
             printf("Enter New Middle Name: ");
             fgets(current->middleName, sizeof(current->middleName), stdin);
@@ -425,7 +422,8 @@ void modifyStudent(struct Student *head, int studentNumber)
             scanf("%s", current->year);
 
             // Clear input buffer after reading integers
-            while ((c = getchar()) != '\n' && c != EOF);
+            while ((c = getchar()) != '\n' && c != EOF)
+                ;
 
             printf("Enter New Email: ");
             fgets(current->email, sizeof(current->email), stdin);
@@ -435,9 +433,9 @@ void modifyStudent(struct Student *head, int studentNumber)
             fgets(current->sex, sizeof(current->sex), stdin);
             current->sex[strcspn(current->sex, "\n")] = '\0';
 
-          printf("Enter New Course(s) (comma-separated): ");
-          fgets(current->course, sizeof(current->course), stdin);
-          current->course[strcspn(current->course, "\n")] = '\0';
+            printf("Enter New Course(s) (comma-separated): ");
+            fgets(current->course, sizeof(current->course), stdin);
+            current->course[strcspn(current->course, "\n")] = '\0';
 
             printf("\nStudent information updated successfully!\n");
             return;
@@ -483,13 +481,11 @@ void searchStudent(struct Student *head, int studentNumber)
         head = head->next;
     }
 
-    // If the loop completes, the student was not found
     printf("\nStudent with ID %d not found.\n", studentNumber);
 }
 
 void displayStudentsInTable(struct Student *head)
 {
-    // Display all students' details in a table format
     printf("\n=== STUDENT DETAILS ===\n");
     printf("| %-15s | %-30s | %-5s | %-5s | %-10s | %-30s | %-30s |\n", "Student ID", "Name", "Age", "Year", "Sex", "Email", "Course");
     printf("|-----------------|--------------------------------|-------|-------|------------|--------------------------------|--------------------------------|\n");
@@ -560,7 +556,6 @@ void enrollCourse(struct Student *head, int studentNumber)
         {
             printf("\nEnter Course to Enroll for Student %d: ", studentNumber);
 
-            // Read the new course input
             char newCourse[50];
             scanf(" %[^\n]", newCourse);
 
@@ -609,7 +604,6 @@ void displayCourseTable()
 FOR FILE HADNLING
 TO DO:
     - DOUBLE CHECK IF GUMAGANA
-    - PRINTTING PROBLEM: PRINTING EXCESS CHARACTERS
 */
 
 // saving student data - to check
@@ -643,8 +637,6 @@ void saveStudentsToFile(struct Student *head)
         perror("Error closing file");
     }
 }
-
-
 
 // loading students from file rito
 struct Student *loadStudentsFromFile()
@@ -698,11 +690,3 @@ struct Student *loadStudentsFromFile()
 
     return head;
 }
-
-
-
-
-
-
-
-
