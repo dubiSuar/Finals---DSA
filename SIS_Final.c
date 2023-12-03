@@ -18,29 +18,30 @@ struct Student
     struct Student *next;
 };
 
+
 // Functions for program - add,remove, search, etc;
-void addStudent(struct Student **head, int studentNumber);
-void displayStudents(struct Student *head);
-int authenticateAdmin(char *adminName, char *adminPass);
-void enterStudentDetails(struct Student *student);
-void displayStudentsInTable(struct Student *head);
-void searchStudent(struct Student *head, int studentNumber);
-void modifyStudent(struct Student *head, int studentNumber);
+void addStudent(struct Student **head, int studentNumber);//Suansing
+void displayStudents(struct Student *head);//Suansing
+int authenticateAdmin(char *adminName, char *adminPass);//Balingit
+void enterStudentDetails(struct Student *student);//Cahilig
+void displayStudentsInTable(struct Student *head);//Cahilig
+void searchStudent(struct Student *head, int studentNumber);//Suansing
+void modifyStudent(struct Student *head, int studentNumber);//Cahilig
 void deleteStudent(struct Student **head, int studentNumber);
-void userLogin(struct Student **head);
-void enrollCourse(struct Student *head, int studentNumber);
+void userLogin(struct Student **head);//Suansing
+void enrollCourse(struct Student *head, int studentNumber);//Balingit
 
 // Fixed table to display courses for the student
-void displayCourseTable();
+void displayCourseTable();//Blancaflor                                      
 
 // File Handling Functions
-void saveStudentsToFile(struct Student *head);
-struct Student *loadStudentsFromFile();
+void saveStudentsToFile(struct Student *head);//Blancaflor                  
+struct Student *loadStudentsFromFile();   //Blancaflor                       
 
 // Function menus
-int displayMenu();
-void titleInfo();
-void adminLogin();
+int displayMenu();//Blancaflor                                              
+void titleInfo();//Blancaflor
+void adminLogin(); //Blancaflor
 
 int main()
 {
@@ -75,7 +76,7 @@ int main()
 
     printf("Program has Terminated Successfully!\n");
 
-    return 0;
+    return choice;
 }
 
 int displayMenu()
